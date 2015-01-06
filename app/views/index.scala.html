@@ -1,7 +1,10 @@
-@(message: String)
+@()
 
 @main("Welcome to Play") {
 
-    @play20.welcome(message)
+    <h1>Hello everyone!</h1>
+
+    <a href="@controllers.routes.Questions.createQuestion()">Create Question</a>
+
 
 }
