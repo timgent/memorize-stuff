@@ -12,5 +12,6 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   "org.webjars" %% "webjars-play" % "2.3.0-2",
-  "org.webjars" % "bootstrap" % "3.1.1-2"
+  "org.webjars" % "bootstrap" % "3.1.1-2",
+  "org.scalatestplus" %% "play" % "1.2.0" % "test"
 )
