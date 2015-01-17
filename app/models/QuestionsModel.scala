@@ -5,9 +5,10 @@ import play.api.mvc._
 import play.modules.reactivemongo.MongoController
 import play.modules.reactivemongo.json.collection.JSONCollection
 import play.api.libs.concurrent.Execution.Implicits._
+import play.modules.reactivemongo.ReactiveMongoPlugin._
+import play.api.Play.current
 
 trait QuestionsModel {
-  this: MongoController =>
   def collection: JSONCollection = db.collection[JSONCollection]("questions")
   implicit val questionFormat = Json.format[Question]
 

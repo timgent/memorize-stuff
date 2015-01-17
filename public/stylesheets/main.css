@@ -1,0 +1,17 @@
+.ms-navbar {
+    border-color: black;
+    border-widows: 1px;
+    border: medium;
+    border-style: solid;
+    padding: 10px;
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.ms-navbar-row {
+    margin: 3%
+}
+
+.ms-submit {
+    margin-top: 3%;
+}

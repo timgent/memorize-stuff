@@ -15,6 +15,15 @@
         <script src="js/bootstrap.min.js"></script>
     </head>
     <body bgcolor="pink">
-        @content
+        <div class="container">
+            <div class="row ms-navbar-row">
+                <div class=".col-md-12">
+                    <h1 class="text-center">Memorize stuff</h1>
+                    <a class="ms-navbar" href="@controllers.routes.ApplicationController.index()">Home</a>
+                    <a class="ms-navbar" href="@controllers.routes.QuestionsController.createQuestion()">Add Questions</a>
+                </div>
+            </div>
+            @content
+        </div>
     </body>
 </html>

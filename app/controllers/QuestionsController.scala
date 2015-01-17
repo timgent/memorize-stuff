@@ -10,7 +10,7 @@ import play.api.libs.concurrent.Execution.Implicits._
 trait QuestionsController extends QuestionsModel with MongoController with Controller {
   this: Controller =>
 
-    def createQuestion = Action {
+  def createQuestion = Action {
     Ok(views.html.addQuestion())
   }
 
