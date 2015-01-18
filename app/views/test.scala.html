@@ -1,8 +1,49 @@
-@()
+@(question: Question, showAnswer: Boolean = false)
 
-@main("This is where you'll take a test") {
+@main("Test me!") {
+    <div class="row ms-row-30">
+        <div class="col-md-2">
+            <label>Question</label>
+        </div>
+        <div class="col-md-10">
+            <p class="ms-lg-input-text">@question.question</p>
+        </div>
+    </div>
 
-    <h1>Test time!</h1>
+    <form method="post" action="@controllers.routes.QuestionsController.checkAnswer()">
+        <div class="row ms-row-30">
+            <div class="col-md-2">
+                <label>@if(showAnswer){Your }Answer</label>
+            </div>
+            <div class="col-md-10">
+                <textarea name="answer" class="ms-lg-input-text"></textarea>
+            </div>
+        </div>
+        @if(showAnswer) {
+            <div class="row">
+                <div class="col-md-2">
+                    <p>Actual Answer</p>
+                </div>
+                <div class="col-md-10">
+                    <p>@question.answer</p>
+                </div>
+            </div>
+            <div class="row">
+                <a href="@controllers.routes.QuestionsController.testMe()">Go to next question</a>
+            </div>
+        }
+        <div class="row">
+        @if(!showAnswer) {
+            <div class="col-xs-3">
+                <a href="@controllers.routes.QuestionsController.testMeShowAnswer(question.randomIndex.toString)">
+                    Show answer</a>
+            </div>
 
+            <div class="col-xs-1 ms-submit">
+                <input class="align" type="submit" value="Submit">
+            </div>
+        }
+        </div>
+    </form>
 
 }

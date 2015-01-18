@@ -9,17 +9,22 @@ import play.modules.reactivemongo.MongoController
 import play.modules.reactivemongo.json.collection.JSONCollection
 import play.api.libs.concurrent.Execution.Implicits._
 
+import scala.concurrent.Future
+
 trait QuestionsController extends QuestionsModel with MongoController with Controller {
   this: Controller =>
 
-  def createQuestionView = Action {
-    Ok(views.html.addQuestion())
+  def createQuestionView = Action.async {
+    getNextQuestionNumber.map(questionNumber =>
+      Ok(views.html.addQuestion(questionNumber))
+    )
   }
 
   val createQuestionForm = Form(
     mapping(
       "question" -> nonEmptyText,
-    "answer" -> nonEmptyText
+      "answer" -> nonEmptyText,
+      "randomIndex" -> number
     )(Question.apply)(Question.unapply)
   )
 
@@ -31,16 +36,46 @@ trait QuestionsController extends QuestionsModel with MongoController with Contr
       },
       question => {
         /* binding success, you get the actual value. */
-        val newQuestion = models.Question(question.question, question.answer)
-        QuestionsModel.create(newQuestion.question, newQuestion.answer)
-//        val id = models.Question.create(newUser)
-//        Redirect(routes.Application.home(id))
+        val newQuestion = models.Question(question.question, question.answer, question.randomIndex)
+        QuestionsModel.create(newQuestion)
       }
     )
-    Ok("Well done you've created a question!")
+    Redirect(controllers.routes.QuestionsController.createQuestionView())
   }
 
+  def testMeWithQuestionNumber(questionNumber: String) = Action.async {
+    findQuestionByRandomIndex(questionNumber.toInt).map(
+      _ match {
+        case Some(question) => Ok(views.html.test(question, false))
+        case None => Ok("No questions found")
+      }
+    )
+  }
+
+  def testMe() = Action.async {
+    findRandomQuestion.map(
+      _ match {
+        case Some(question) => Redirect(controllers.routes.QuestionsController.testMeWithQuestionNumber(question.randomIndex.toString))
+        case None => Ok("No questions found")
+      }
+    )
+  }
+  
+  def testMeShowAnswer(questionNumber: String) = Action.async {
+    val question = findQuestionByRandomIndex(questionNumber.toInt)
+    question.map {question =>
+      question match {
+        case Some(question) => Ok(views.html.test(question, true))
+        case None           => Ok("Sorry it appears this question no longer exists")
+      }
+    }
+  }
+
+  def checkAnswer = Action {
+    Ok("Checking answer...")
+  }
 
 }
 
-object QuestionsController extends QuestionsController
+object QuestionsController extends QuestionsController {
+}

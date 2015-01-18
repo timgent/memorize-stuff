@@ -3,13 +3,18 @@
 # ~~~~
 
 # Home page
-GET        /                      controllers.ApplicationController.index
-GET        /createQuestion        controllers.QuestionsController.createQuestionView
-POST       /createQuestion        controllers.QuestionsController.createQuestion
+GET         /                                       controllers.ApplicationController.index
+GET         /createQuestion                         controllers.QuestionsController.createQuestionView
+POST        /createQuestion                         controllers.QuestionsController.createQuestion
+GET         /testme/:questionNumber                 controllers.QuestionsController.testMeWithQuestionNumber(questionNumber)
+GET         /testme                                 controllers.QuestionsController.testMe
+GET         /testme-showAnswer/:questionNumber      controllers.QuestionsController.testMeShowAnswer(questionNumber)
+POST        /checkAnswer                            controllers.QuestionsController.checkAnswer
+
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file          controllers.Assets.at(path="/public", file)
+GET         /assets/*file                           controllers.Assets.at(path="/public", file)
 
-GET        /webjars/*file         controllers.WebJarAssets.at(file)
+GET         /webjars/*file                          controllers.WebJarAssets.at(file)
 
 

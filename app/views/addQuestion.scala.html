@@ -1,4 +1,4 @@
-@()
+@(count: Int)
 
 @main("Add Question and Answer") {
 
@@ -24,6 +24,6 @@
                 <input class="align" type="submit" value="Submit">
             </div>
         </div>
-
+        <input type="hidden" name="randomIndex" value="@count">
     </form>
 }
