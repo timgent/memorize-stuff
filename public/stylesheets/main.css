@@ -8,6 +8,15 @@
     margin-left: 0px;
 }
 
+.ms-lg-input-text {
+    width: 50%;
+    height: 30%;
+}
+
+.ms-row-30 {
+    height: 2000%;
+}
+
 .ms-navbar-row {
     margin: 3%
 }

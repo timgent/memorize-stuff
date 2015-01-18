@@ -14,7 +14,7 @@ class QuestionsControllerSpec extends PlaySpec with OneAppPerSuite {
 
     "direct to the create question page" in {
       val controller = new TestQuestionsController()
-      val result: Future[Result] = controller.createQuestion().apply(FakeRequest())
+      val result: Future[Result] = controller.createQuestionView().apply(FakeRequest())
       val bodyText: String = contentAsString(result)
       bodyText must include("Add Question and Answer")
     }

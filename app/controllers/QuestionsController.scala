@@ -1,6 +1,8 @@
 package controllers
 
-import models.QuestionsModel
+import models.{Question, QuestionsModel}
+import play.api.data._
+import play.api.data.Forms._
 import play.api.libs.json.Json
 import play.api.mvc._
 import play.modules.reactivemongo.MongoController
@@ -10,15 +12,34 @@ import play.api.libs.concurrent.Execution.Implicits._
 trait QuestionsController extends QuestionsModel with MongoController with Controller {
   this: Controller =>
 
-  def createQuestion = Action {
+  def createQuestionView = Action {
     Ok(views.html.addQuestion())
   }
 
-  //TODO GET RID OF THIS SHIT
-  def addRandomShitToDB = Action {
-    create
-    Ok("Succesfull insertion, well done")
+  val createQuestionForm = Form(
+    mapping(
+      "question" -> nonEmptyText,
+    "answer" -> nonEmptyText
+    )(Question.apply)(Question.unapply)
+  )
+
+  def createQuestion = Action { implicit request =>
+    createQuestionForm.bindFromRequest.fold(
+      formWithErrors => {
+        // binding failure, you retrieve the form containing errors:
+        BadRequest("BAD BAD BAD")
+      },
+      question => {
+        /* binding success, you get the actual value. */
+        val newQuestion = models.Question(question.question, question.answer)
+        QuestionsModel.create(newQuestion.question, newQuestion.answer)
+//        val id = models.Question.create(newUser)
+//        Redirect(routes.Application.home(id))
+      }
+    )
+    Ok("Well done you've created a question!")
   }
+
 
 }
 

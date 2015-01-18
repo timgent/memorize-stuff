@@ -3,15 +3,13 @@
 # ~~~~
 
 # Home page
-GET        /                     controllers.ApplicationController.index
-GET        /addQuestion          controllers.QuestionsController.createQuestion
-
-#TODO GET RID OF THIS TEST ROUTE
-GET        /test                 controllers.QuestionsController.addRandomShitToDB
+GET        /                      controllers.ApplicationController.index
+GET        /createQuestion        controllers.QuestionsController.createQuestionView
+POST       /createQuestion        controllers.QuestionsController.createQuestion
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file         controllers.Assets.at(path="/public", file)
+GET        /assets/*file          controllers.Assets.at(path="/public", file)
 
-GET        /webjars/*file        controllers.WebJarAssets.at(file)
+GET        /webjars/*file         controllers.WebJarAssets.at(file)
 
 
