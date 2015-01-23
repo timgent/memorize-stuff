@@ -75,6 +75,14 @@ trait QuestionsController extends QuestionsModel with MongoController with Contr
     Ok("Checking answer...")
   }
 
+  val correctAnswerForm = Form(
+    mapping(
+      "questionID" -> number,
+      "answerBoolean" -> boolean,
+    )(SubmittedAnswer.apply)(SubmittedAnswer.unapply)
+  )
+
+  case class (id: String, answerBoolean: Boolean)
 }
 
 object QuestionsController extends QuestionsController {
