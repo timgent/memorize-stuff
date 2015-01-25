@@ -23,3 +23,4 @@ trait NoAkkaLogging {
       additionalConfiguration = Map("akka.log-dead-letters" -> "off")
     )
 }
+
