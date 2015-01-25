@@ -17,36 +17,35 @@ trait QuestionsModel {
   def collection: JSONCollection = db.collection[JSONCollection]("questions")
 
   implicit val questionFormat = Json.format[Question]
-  val randomIndex = "randomIndex"
+  val ID = "_id"
 
-  def create(question: Question) = {
-    val futureResult = collection.insert(question)
-    futureResult
+  def create(question: String, answer: String) = {
+    for {questionId <- getNextQuestionId} yield collection.insert(Question(question, answer, questionId))
   }
 
   def findRandomQuestion: Future[Option[Question]] = {
-    val rand = getNextQuestionNumber.flatMap {totalQs =>
+    val rand = getNextQuestionId.flatMap {totalQs =>
       if (totalQs>0) {
-        collection.find(Json.obj(randomIndex -> Random.nextInt(totalQs))).one[Question]
+        collection.find(Json.obj(ID -> Random.nextInt(totalQs))).one[Question]
       } else {Future(None)}
     }
     rand
   }
 
-  def findQuestionByRandomIndex(index: Int): Future[Option[Question]] = {
-    collection.find(Json.obj(randomIndex -> index)).one[Question]
+  def findQuestionById(_id: Int): Future[Option[Question]] = {
+    collection.find(Json.obj(ID -> _id)).one[Question]
   }
   
-  def getNextQuestionNumber: Future[Int] = {
+  def getNextQuestionId: Future[Int] = {
     db.command(Count("questions", None, None))
   }
 
   def totalNumberOfQuestions: Future[Int] = {
-    getNextQuestionNumber.map(_ - 1)
+    getNextQuestionId.map(_ - 1)
   }
 
 }
 
 object QuestionsModel extends QuestionsModel
 
-case class Question(question: String, answer: String, randomIndex: Int)
+case class Question(question: String, answer: String, _id: Int)

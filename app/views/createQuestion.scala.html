@@ -1,0 +1,32 @@
+@()(implicit flash: Flash)
+
+    @main("Add Question and Answer") {
+        @if(!flash.isEmpty) {
+            <div class="row">
+                <p class="alert-success">@flash.get("message")</p>
+            </div>
+        }
+        <form method="post" action="@controllers.routes.QuestionsController.createQuestion()">
+            <div class="row ms-row-30">
+                <div class="col-md-2">
+                    <label>Question</label>
+                </div>
+                <div class="col-md-10">
+                    <textarea name="question" class="ms-lg-input-text"></textarea>
+                </div>
+            </div>
+            <div class="row ms-row-30">
+                <div class="col-md-2">
+                    <label>Answer</label>
+                </div>
+                <div class="col-md-10">
+                    <textarea name="answer" class="ms-lg-input-text"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-1 col-xs-offset-3 ms-submit">
+                    <input class="align" type="submit" value="Submit">
+                </div>
+            </div>
+        </form>
+    }

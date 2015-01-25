@@ -13,7 +13,7 @@
     <form method="post" action="@controllers.routes.QuestionsController.checkAnswer()">
         <div class="row ms-row-30">
             <div class="col-md-2">
-                <label>@if(showAnswer){Your }Answer</label>
+                <label>@if(showAnswer) {Your }Answer</label>
             </div>
             <div class="col-md-10">
                 <textarea name="answer" class="ms-lg-input-text"></textarea>
@@ -28,29 +28,26 @@
                     <p>@question.answer</p>
                 </div>
             </div>
-            <div class="row">
-                <a href="@controllers.routes.QuestionsController.testMe()">Go to next question</a>
-            </div>
         }
-        }
-        </div>
     </form>
 
-        <div class="row">
+    <div class="row">
         @if(!showAnswer) {
             <div class="col-xs-3">
-                <a href="@controllers.routes.QuestionsController.testMeShowAnswer(question.randomIndex.toString)">
+                <a href="@controllers.routes.QuestionsController.testMeShowAnswer(question._id.toString)">
                     Show answer</a>
             </div>
-
+        }else {
             <form method="post" action="@controllers.routes.QuestionsController.checkAnswer()">
                 <div class="col-xs-1 ms-submit">
-                    <input class="align" type="submit" value="I'm right!">
+                    <input id="right" type="submit" value="I'm right!">
                 </div>
             </form>
             <form method="post" action="@controllers.routes.QuestionsController.checkAnswer()">
                 <div class="col-xs-1 ms-submit">
-                    <input class="align" type="submit" value=":(">
+                    <input id="wrong" type="submit" value="I'm wrong :(">
                 </div>
             </form>
+        }
+    </div>
 }
