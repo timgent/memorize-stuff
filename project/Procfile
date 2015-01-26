@@ -1,0 +1,1 @@
+web: target/start -mongodb.uri=${MONGOLAB_URI}
