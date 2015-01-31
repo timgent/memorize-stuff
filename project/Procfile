@@ -1,1 +1,1 @@
-web: target/start -mongodb.uri=${MONGOLAB_URI}
+web: target/start -mongodb.uri=mongodb://timmeh:hackdarb@ds031741.mongolab.com:31741/heroku_app33493424
