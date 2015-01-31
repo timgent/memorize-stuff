@@ -1,1 +1,1 @@
-web: start -D http.port=$PORT -Dmongodb.uri=mongodb://timmeh:hackdarb@ds031741.mongolab.com:31741/heroku_app33493424
+web: ./activator "start -Dhttp.port=$PORT -Dmongodb.uri=mongodb://timmeh:hackdarb@ds031741.mongolab.com:31741/heroku_app33493424"
