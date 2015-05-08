@@ -1,12 +1,11 @@
 package functional
 
-import functional.support.{NoAkkaLogging, FeatureHelper}
 import models.QuestionsModel
 import org.scalatest._
 import org.scalatestplus.play._
 import play.api.libs.json.Json
-import play.api.test.FakeApplication
 import play.api.test.Helpers._
+import support.{FeatureHelper, NoAkkaLogging}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

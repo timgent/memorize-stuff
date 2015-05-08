@@ -1,4 +1,4 @@
-@(question: Question, showAnswer: Boolean = false)
+@(question: Question, showAnswer: Boolean = false, questionsAnswered: String)
 
 @main("Test me!") {
     <div class="row ms-row-30">
@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <form method="post" action="@controllers.routes.QuestionsController.checkAnswer()">
+    <form method="post" action="@controllers.routes.QuestionsController.checkAnswer(questionsAnswered)">
         <div class="row ms-row-30">
             <div class="col-md-2">
                 <label>@if(showAnswer) {Your }Answer</label>
@@ -34,17 +34,21 @@
     <div class="row">
         @if(!showAnswer) {
             <div class="col-xs-3">
-                <a href="@controllers.routes.QuestionsController.testMeShowAnswer(question._id.toString)">
+                <a href="@controllers.routes.QuestionsController.testMeShowAnswer(question._id.toString, questionsAnswered)">
                     Show answer</a>
             </div>
         }else {
-            <form method="post" action="@controllers.routes.QuestionsController.checkAnswer()">
+            <form method="post" action="@controllers.routes.QuestionsController.checkAnswer(questionsAnswered)">
                 <div class="col-xs-1 ms-submit">
+                    <input name="questionId" value="@question._id" type="hidden">
+                    <input name="isCorrect" value="true" type="hidden">
                     <input id="right" type="submit" value="I'm right!">
                 </div>
             </form>
-            <form method="post" action="@controllers.routes.QuestionsController.checkAnswer()">
+            <form method="post" action="@controllers.routes.QuestionsController.checkAnswer(questionsAnswered)">
                 <div class="col-xs-1 ms-submit">
+                    <input name="questionId" value="@question._id" type="hidden">
+                    <input name="isCorrect" value="false" type="hidden">
                     <input id="wrong" type="submit" value="I'm wrong :(">
                 </div>
             </form>

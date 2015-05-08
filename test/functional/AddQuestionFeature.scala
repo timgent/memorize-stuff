@@ -1,20 +1,19 @@
 package functional
 
-import functional.support.NoAkkaLogging
 import models.QuestionsModel
 import org.scalatest._
 import org.scalatestplus.play._
 import play.api.test.Helpers._
-import play.api.test._
+import support.NoAkkaLogging
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class AddQuestionFeature extends FeatureSpec with GivenWhenThen with MustMatchers with OptionValues
 with WsScalaTestClient with OneServerPerSuite with HtmlUnitFactory with OneBrowserPerSuite
 with BeforeAndAfter with NoAkkaLogging {
-  
 
-  before{
+
+  before {
     QuestionsModel.collection.drop()
   }
 
@@ -28,7 +27,7 @@ with BeforeAndAfter with NoAkkaLogging {
     click on linkText("Add Questions")
 
     Then("they are able to add in multiple questions and answers")
-    addQuestion("Does this functionality work?","Of course it does!")
+    addQuestion("Does this functionality work?", "Of course it does!")
     eventually(assert(pageSource.contains("Question added!")))
     addQuestion("Question 2", "Answer 2")
     eventually(assert(await(QuestionsModel.findQuestionById(0)).get.question == "Does this functionality work?"))

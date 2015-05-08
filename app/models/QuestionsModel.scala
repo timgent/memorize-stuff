@@ -10,7 +10,6 @@ import play.api.Play.current
 import reactivemongo.core.commands.Count
 import scala.concurrent._
 import reactivemongo.bson.BSONObjectID
-
 import scala.util.Random
 
 trait QuestionsModel {
@@ -35,7 +34,8 @@ trait QuestionsModel {
   def findQuestionById(_id: Int): Future[Option[Question]] = {
     collection.find(Json.obj(ID -> _id)).one[Question]
   }
-  
+
+//  TODO: Remove this abomination, won't need it once I have a new way to select random questions
   def getNextQuestionId: Future[Int] = {
     db.command(Count("questions", None, None))
   }

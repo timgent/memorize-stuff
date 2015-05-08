@@ -1,7 +1,7 @@
-package functional.support
+package support
 
 import models.QuestionsModel
-import org.scalatestplus.play.OneServerPerSuite
+import org.scalatestplus.play.{OneAppPerSuite, OneServerPerSuite}
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 
@@ -24,3 +24,12 @@ trait NoAkkaLogging {
     )
 }
 
+trait NoAkkaAppLogging {
+  this: OneAppPerSuite =>
+  // Override app if you need a FakeApplication with other than
+  // default parameters.
+  implicit override lazy val app: FakeApplication =
+    FakeApplication(
+      additionalConfiguration = Map("akka.log-dead-letters" -> "off")
+    )
+}

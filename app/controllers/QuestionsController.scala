@@ -1,6 +1,6 @@
 package controllers
 
-import models.{Question, QuestionsModel}
+import models.{TestResult, TestResultsModel, Question, QuestionsModel}
 import play.api.data._
 import play.api.data.Forms._
 import play.api.libs.json.Json
@@ -14,16 +14,28 @@ import scala.concurrent.Future
 trait QuestionsController extends QuestionsModel with MongoController with Controller {
   this: Controller =>
 
-  def createQuestionView = Action.async { implicit request =>
-    Future(Ok(views.html.createQuestion()))
-  }
-
   val createQuestionForm = Form(
     tuple(
       "question" -> nonEmptyText,
       "answer" -> nonEmptyText
     )
   )
+  val submitAnswerForm = Form(
+    tuple(
+      "isCorrect" -> boolean,
+      "questionId" -> number
+    )
+  )
+  val correctAnswerForm = Form(
+    mapping(
+      "questionID" -> number,
+      "answerBoolean" -> boolean
+    )(SubmittedAnswer.apply)(SubmittedAnswer.unapply)
+  )
+
+  def createQuestionView = Action.async { implicit request =>
+    Future(Ok(views.html.createQuestion()))
+  }
 
   def createQuestion = Action { implicit request =>
     createQuestionForm.bindFromRequest.fold(
@@ -39,44 +51,55 @@ trait QuestionsController extends QuestionsModel with MongoController with Contr
     Redirect(controllers.routes.QuestionsController.createQuestionView()).flashing(Flash(Map("message" -> "Question added!")))
   }
 
-  def testMeWithQuestionNumber(questionNumber: String) = Action.async { implicit request =>
+  def testMeWithQuestionNumber(questionNumber: String, questionsAnswered: String) = Action.async { implicit request =>
     findQuestionById(questionNumber.toInt).map(
       _ match {
-        case Some(question) => Ok(views.html.test(question, false))
+        case Some(question) => Ok(views.html.test(question, false, questionsAnswered))
         case None => Ok("No questions found")
       }
     )
   }
 
-  def testMe() = Action.async { implicit request =>
-    findRandomQuestion.map(
-      _ match {
-        case Some(question) => Redirect(controllers.routes.QuestionsController.testMeWithQuestionNumber(question._id.toString))
-        case None => Ok("No questions found")
-      }
-    )
-  }
-
-  def testMeShowAnswer(questionNumber: String) = Action.async { implicit request =>
-    val question = findQuestionById(questionNumber.toInt)
-    question.map { question =>
-      question match {
-        case Some(question) => Ok(views.html.test(question, true))
-        case None => Ok("Sorry it appears this question no longer exists")
-      }
+  def testMe(questionsAnswered: String = "0") = Action.async { implicit request =>
+    findRandomQuestion.map {
+      case Some(question) => Redirect(controllers.routes.QuestionsController.testMeWithQuestionNumber(question._id.toString, questionsAnswered))
+      case None => Ok("No questions found")
     }
   }
 
-  def checkAnswer = Action { implicit request =>
-    Ok("Checking answer...")
+  def randomStuff = {
+    Ok("")
   }
 
-  val correctAnswerForm = Form(
-    mapping(
-      "questionID" -> number,
-      "answerBoolean" -> boolean
-    )(SubmittedAnswer.apply)(SubmittedAnswer.unapply)
-  )
+  def testMeShowAnswer(questionNumber: String, questionsAnswered: String) = Action.async { implicit request =>
+    val question = findQuestionById(questionNumber.toInt)
+    question.map {
+      case Some(question) => Ok(views.html.test(question, true, questionsAnswered))
+      case None => Ok("Sorry it appears this question no longer exists")
+    }
+  }
+
+//  TODO: Update so it posts questionsAnswered instead of including it as a param
+  def checkAnswer(questionsAnswered: String) = Action { implicit request =>
+    submitAnswerForm.bindFromRequest.fold(
+      formWithErrors => {
+        Ok("You buggered that one up")
+      },
+      answer => {
+        TestResultsModel.create(TestResult(answer._2, answer._1))
+        questionsAnswered match {
+          case qs if qs.toInt > 10 => Ok("Test complete")
+          case qs =>
+            TestResultsModel.create(TestResult(answer._2, answer._1))
+            Redirect(controllers.routes.QuestionsController.testMe((questionsAnswered.toInt + 1).toString))
+        }
+      }
+    )
+  }
+
+  def showResults(score: String) = {
+    Ok(views.html.results(score))
+  }
 
   case class SubmittedAnswer(id: Int, answerBoolean: Boolean)
 
