@@ -97,7 +97,7 @@ trait QuestionsController extends QuestionsModel with MongoController with Contr
     )
   }
 
-  def showResults(score: String) = {
+  def showResults(score: String) = Action {
     Ok(views.html.results(score))
   }
 

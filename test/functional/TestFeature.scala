@@ -5,11 +5,36 @@ import org.scalatest._
 import org.scalatestplus.play._
 import play.api.libs.json.Json
 import play.api.test.Helpers._
-import support.{FeatureHelper, NoAkkaLogging}
+import support.{NoAkkaLogging, FeatureHelper}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class TestFeature extends FeatureSpec with GivenWhenThen with MustMatchers with OptionValues
+//class TestFeature extends PlaySpec with OneAppPerSuite with BeforeAndAfter {
+//  before {
+//    QuestionsModel.collection.drop()
+//  }
+//
+//  "create question" should {
+//    "create the next question in the sequence" in {
+//      await(QuestionsModel.create("Q1", "A1"))
+//      await(QuestionsModel.create("Q2", "A2"))
+//      await(QuestionsModel.create("Q3", "A3"))
+//
+//      await(QuestionsModel.findQuestionById(0)).get.question must be("Q1")
+//      await(QuestionsModel.findQuestionById(1)).get.question must be("Q2")
+//      await(QuestionsModel.findQuestionById(2)).get.question must be("Q3")
+//    }
+//  }
+//}
+
+class TestFeature extends FeatureSpec with GivenWhenThen {
+  scenario("test") {
+    assert(1 == 1)
+  }
+}
+
+
+class TestFeature extends FeatureSpec with GivenWhenThen with OptionValues
 with WsScalaTestClient with OneServerPerSuite with HtmlUnitFactory with OneBrowserPerSuite
 with BeforeAndAfter with NoAkkaLogging {
 
@@ -58,4 +83,3 @@ with BeforeAndAfter with NoAkkaLogging {
     }
   }
 }
-
