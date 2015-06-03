@@ -13,10 +13,10 @@
     <form method="post" action="@controllers.routes.QuestionsController.checkAnswer(questionsAnswered)">
         <div class="row ms-row-30">
             <div class="col-md-2">
-                <label>@if(showAnswer) {Your }Answer</label>
+                <label for="answer">@if(showAnswer) {Your }Answer</label>
             </div>
             <div class="col-md-10">
-                <textarea name="answer" class="ms-lg-input-text"></textarea>
+                <textarea id="answer" name="answer" class="ms-lg-input-text"></textarea>
             </div>
         </div>
         @if(showAnswer) {

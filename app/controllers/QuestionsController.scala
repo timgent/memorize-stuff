@@ -88,7 +88,7 @@ trait QuestionsController extends QuestionsModel with MongoController with Contr
       answer => {
         TestResultsModel.create(TestResult(answer._2, answer._1))
         questionsAnswered match {
-          case qs if qs.toInt > 10 => Ok("Test complete")
+          case qs if qs.toInt > 8 => Ok("Test complete")
           case qs =>
             TestResultsModel.create(TestResult(answer._2, answer._1))
             Redirect(controllers.routes.QuestionsController.testMe((questionsAnswered.toInt + 1).toString))
