@@ -91,7 +91,7 @@ trait QuestionsController extends QuestionsModel with MongoController with Contr
         questionsAnswered match {
           case qs if qs.toInt > 8 =>
             val score = TestResultsModel.countCorrect()
-            score.map(s => Ok((s"Your score is $s out of 10")))
+            score.map(s => Ok(views.html.results(s.toString)))
           case qs =>
             Future(Redirect(controllers.routes.QuestionsController.testMe((questionsAnswered.toInt + 1).toString)))
         }

@@ -27,14 +27,16 @@ object TestResultsModel {
     collection.db.command(Count(collection.name))
   }
 
-  def countCorrect() = {
-    val query = BSONDocument("isCorrect" -> true)
-    collection.db.command(Count(collection.name, Some(query)))
+  private def last10Questions() = {
+    collection.find(Json.obj()).sort(Json.obj("date" -> -1)).cursor.toList(10)
+  }
+
+  def countCorrect(): Future[Int] = {
+    last10Questions().map(questions => questions.filter(_.isCorrect).length)
   }
 
   def countWrong() = {
-    val query = BSONDocument("isCorrect" -> false)
-    collection.db.command(Count(collection.name, Some(query)))
+    countCorrect().map(10 - _)
   }
 }
 
