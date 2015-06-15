@@ -5,7 +5,7 @@ And(/^then completes a test$/) do
 end
 
 Then(/^they will be presented with their test score marked as (.*)$/) do |mark|
-  expect(page).to have_content('You\'re score is '+mark+'!')
+  expect(page).to have_content('Your score is '+mark)
 end
 
 def answer_questions(number_of_questions, is_correct)

@@ -1,6 +1,7 @@
 package controllers
 
 import models.{TestResult, TestResultsModel, Question, QuestionsModel}
+import org.joda.time.DateTime
 import play.api.data._
 import play.api.data.Forms._
 import play.api.libs.json.Json
@@ -80,18 +81,19 @@ trait QuestionsController extends QuestionsModel with MongoController with Contr
   }
 
 //  TODO: Update so it posts questionsAnswered instead of including it as a param
-  def checkAnswer(questionsAnswered: String) = Action { implicit request =>
+  def checkAnswer(questionsAnswered: String) = Action.async { implicit request =>
     submitAnswerForm.bindFromRequest.fold(
       formWithErrors => {
-        Ok("You buggered that one up")
+        Future(Ok("You buggered that one up"))
       },
       answer => {
-        TestResultsModel.create(TestResult(answer._2, answer._1))
+        TestResultsModel.create(TestResult(answer._2, answer._1, DateTime.now))
         questionsAnswered match {
-          case qs if qs.toInt > 8 => Ok("Test complete")
+          case qs if qs.toInt > 8 =>
+            val score = TestResultsModel.countCorrect()
+            score.map(s => Ok((s"Your score is $s out of 10")))
           case qs =>
-            TestResultsModel.create(TestResult(answer._2, answer._1))
-            Redirect(controllers.routes.QuestionsController.testMe((questionsAnswered.toInt + 1).toString))
+            Future(Redirect(controllers.routes.QuestionsController.testMe((questionsAnswered.toInt + 1).toString)))
         }
       }
     )

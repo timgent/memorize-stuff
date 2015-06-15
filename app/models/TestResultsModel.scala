@@ -1,5 +1,6 @@
 package models
 
+import org.joda.time.DateTime
 import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc._
 import play.modules.reactivemongo.MongoController
@@ -38,4 +39,4 @@ object TestResultsModel {
 }
 
 
-case class TestResult(questionId: Int, isCorrect: Boolean)
+case class TestResult(questionId: Int, isCorrect: Boolean, date: DateTime)

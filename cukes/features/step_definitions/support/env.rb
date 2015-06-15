@@ -5,6 +5,7 @@ require 'syck'
 require 'faraday_middleware'
 require 'gmail'
 require 'mime'
+require 'mongo'
 
 Capybara.app_host = 'http://localhost:9000'
 Capybara.run_server = false # don't start Rack
@@ -35,5 +36,10 @@ else
   Capybara.default_driver    = :poltergeist
   Capybara.javascript_driver = :poltergeist
   Capybara.automatic_reload
+end
 
+mongo_client = Mongo::Client.new('mongodb://127.0.0.1:27017/memorize_stuff')
+
+Before do
+  mongo_client[:testResults].find().delete_many
 end
